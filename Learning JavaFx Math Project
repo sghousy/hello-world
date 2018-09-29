@@ -1,0 +1,248 @@
+package javafxProject;
+
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.application.Application;
+import javafx.geometry.HPos;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
+import javafx.scene.layout.ColumnConstraints;
+
+
+public class JavaFxMathProject
+        extends Application
+{
+	//Controls and Fonts
+	int answerOutput;
+	int correctValue = 0;
+	int incorrectValue = 0;	
+	int value1;
+	int value2;
+	Button newExerciseButton = new Button("_New Excercise");
+	Button answerButton = new Button("_Answer");   
+	TextField txtAnswer = new TextField();
+	
+   Label labelTitle = new Label("How much is:");
+   Label questionLabel = new Label("Value1 x Value2 = ");
+   Label labelQuestionMark = new Label ("?");
+   
+   Label resultLabel = new Label("");
+   Label answerCorrectOutput = new Label("   Number of\ncorrect answers:");
+   Label answerCorrectLabel = new Label("0");
+   Label answerIncorrectOutput = new Label("    Number of\nincorrect answers:");
+   Label answerIncorrectLabel = new Label("0");
+   Label statsLabel = new Label(" Statistics: ");
+   
+   Font fontTitle = Font.font((String) "Courier", (FontWeight) FontWeight.BOLD, (double) 20.0);
+   Font fontOutputTextStyle = Font.font((String) "Times New Roman", (FontWeight) FontWeight.BOLD, (double) 18.0);
+   Font fontLarge = Font.font((String) "Courier", (FontWeight) FontWeight.SEMI_BOLD, (double) 16.0);
+   Font fontRegular = Font.font((String) "Courier", (FontWeight) FontWeight.NORMAL, (double) 10.0); 
+  
+   
+   
+   
+
+   public void start (Stage primaryStage) throws Exception
+   {
+
+      GridPane primeGrid = new GridPane();
+     
+      primeGrid.setPadding(new Insets(17.0, 17.0, 17.0, 17.0));
+      ColumnConstraints column1 = new ColumnConstraints();
+      column1.setPercentWidth(50.0);
+      ColumnConstraints coulmn2 = new ColumnConstraints();
+      coulmn2.setPercentWidth(50.0);
+      primeGrid.setVgap(10.0);
+      primeGrid.setPrefWidth(400.0);
+      primeGrid.setAlignment(Pos.CENTER);
+    
+     
+      //Top header label
+      this.labelTitle.setFont(this.fontTitle);
+      this.labelTitle.setTextFill((Paint) Color.RED);
+      this.labelTitle.setStyle("-fx-underline:true"); //this creates an underline
+      
+      primeGrid.getColumnConstraints().addAll(new ColumnConstraints[] {column1, coulmn2});
+      primeGrid.add((Node) this.labelTitle, 0, 0);
+      GridPane.setColumnSpan((Node) this.labelTitle, (Integer) 2);
+      GridPane.setHalignment((Node) this.labelTitle, (HPos) HPos.CENTER);
+     
+      
+      
+      //HBox for Questions
+      HBox hboxQuestions = new HBox();
+      
+      hboxQuestions.getChildren().addAll(new Node[] {this.questionLabel, this.txtAnswer,this.labelQuestionMark});
+      hboxQuestions.setAlignment(Pos.CENTER);
+      this.labelQuestionMark.setTranslateX(-90);
+      
+      this.txtAnswer.setPrefColumnCount(2);
+      this.txtAnswer.setDisable(true);
+      this.questionLabel.setFont(this.fontLarge);
+      
+      primeGrid.add((Node) hboxQuestions, 0, 1);
+      primeGrid.add((Node) this.resultLabel, 0, 2);
+      primeGrid.add((Node) this.newExerciseButton, 0, 3);
+      primeGrid.add((Node) this.answerButton, 1, 3);
+      primeGrid.add((Node) this.labelQuestionMark, 2, 1);
+      
+      GridPane.setColumnSpan((Node) hboxQuestions, (Integer) 2);
+     
+      
+      
+      //Controls
+      
+      GridPane.setColumnSpan((Node) this.resultLabel, (Integer) 2);
+      GridPane.setHalignment((Node) this.resultLabel, (HPos) HPos.CENTER);
+      this.resultLabel.setFont(this.fontLarge);
+      this.labelQuestionMark.setFont(fontLarge);
+      
+      
+      
+      //Controls dimensions and properties 
+      this.newExerciseButton.setMaxWidth(Double.MAX_VALUE);
+      this.answerButton.setMaxWidth(Double.MAX_VALUE);
+      this.answerButton.setDisable(true);
+      this.newExerciseButton.setMnemonicParsing(true);
+      this.answerButton.setMnemonicParsing(true);
+     
+      //Grid pane Positioning
+      GridPane positionGrid = new GridPane();
+      positionGrid.setGridLinesVisible(false); //this sets the lines
+      
+      positionGrid.getColumnConstraints().addAll(new ColumnConstraints[] {column1, coulmn2});
+      positionGrid.add((Node) this.answerCorrectOutput, 0, 0);
+      positionGrid.add((Node) this.answerIncorrectOutput, 1, 0);
+      positionGrid.add((Node) this.answerCorrectLabel, 0, 1);
+      positionGrid.add((Node) this.answerIncorrectLabel, 1, 1);
+      
+      
+      GridPane.setHalignment((Node) this.answerCorrectOutput, (HPos) HPos.CENTER);
+      GridPane.setHalignment((Node) this.answerIncorrectOutput, (HPos) HPos.CENTER);
+      GridPane.setHalignment((Node) this.answerCorrectLabel, (HPos) HPos.CENTER);
+      GridPane.setHalignment((Node) this.answerIncorrectLabel, (HPos) HPos.CENTER);
+      
+     
+      this.statsLabel.setStyle("-fx-translate-y:-14;-fx-text-fill:black;-fx-background-color:lightgrey;");
+
+      BorderPane countPane = new BorderPane();
+      countPane.setPadding(new Insets(6.0, 6.0, 6.0, 6.0));
+      countPane.setTop((Node) this.statsLabel);
+      countPane.setCenter((Node) positionGrid);
+     
+      countPane.setStyle("-fx-border-color:lightgrey;-fx-border-style:solid;-fx-border-width:1;");
+      primeGrid.add((Node) countPane, 0, 4);
+      GridPane.setColumnSpan((Node) countPane, (Integer) 2);
+      
+      BorderPane border = new BorderPane();
+      border.setCenter((Node) primeGrid);
+      
+      
+      this.answerCorrectLabel.setFont(this.fontTitle);
+      this.answerIncorrectLabel.setFont(this.fontTitle);
+      this.answerCorrectLabel.setTextFill((Paint) Color.GREEN);
+      this.answerIncorrectLabel.setTextFill((Paint) Color.RED);
+      
+      
+      
+
+      
+      Scene scene = new Scene((Parent) border);
+      primaryStage.setTitle("Assignment 6");
+      primaryStage.setScene(scene);
+      primaryStage.sizeToScene();
+      primaryStage.setResizable(false);
+      primaryStage.show();
+      this.newExerciseButton.setOnAction(e -> {
+    	  this.newExerciseButton.setDisable(true);
+          this.answerButton.setDisable(false);
+          this.txtAnswer.setDisable(false);
+          this.questionLabel.setText(this.getQuestionProcess());
+          this.txtAnswer.requestFocus();
+    	  
+    	 this.answerCorrectLabel.setText("0");
+         this.answerIncorrectLabel.setText("0");
+         
+      }
+      );
+      this.answerButton.setOnAction(e -> {
+         this.questionProcess();
+      }
+      );
+      this.txtAnswer.setOnAction(e -> {
+         this.questionProcess();
+      }
+      );
+   }
+
+   
+   public String getQuestionProcess ()
+   {
+      this.value1 = (int) (Math.random() * 10.0) + 1;
+      this.value2 = (int) (Math.random() * 10.0) + 1;
+      return "" + this.value1 + " x " + this.value2 + " = ";
+   }
+   
+   
+   public void questionProcess ()
+   {
+      boolean validInput = true;
+      this.answerOutput = Integer.parseInt(this.txtAnswer.getText());
+      
+      if (validInput) {
+         if (this.answerOutput == this.value1 * this.value2) {
+            this.answerCorrectLabel.setText("" + ++this.correctValue);
+         }
+         else {
+            this.answerIncorrectLabel.setText("" + ++this.incorrectValue);
+         }
+         this.questionLabel.setText(this.getQuestionProcess());
+         if (this.correctValue + this.incorrectValue == 10) {
+        	 
+        	this.answerButton.setDisable(true);
+            this.newExerciseButton.setDisable(false);
+            this.txtAnswer.setDisable(true);
+             
+            this.txtAnswer.setText("");
+            this.questionLabel.setText("");
+            
+            if ((double) this.correctValue / (double) (this.correctValue + this.incorrectValue) >= 0.7) {
+               this.resultLabel.setText("Keep up the Good Work!");
+               this.resultLabel.setTextFill((Paint) Color.GREEN);
+               this.resultLabel.setFont(fontOutputTextStyle);
+            }
+            else {
+               this.resultLabel.setText("You need to practice more!");
+               this.resultLabel.setTextFill((Paint) Color.RED);
+               this.resultLabel.setFont(fontOutputTextStyle);
+             
+               
+            }
+            this.correctValue = 0;
+            this.incorrectValue = 0;
+         }
+         this.txtAnswer.setText("");
+
+         
+      }
+   }
+
+   
+
+   public static void main (String[] args)
+   {
+     launch((String[]) args);
+   }
+}
